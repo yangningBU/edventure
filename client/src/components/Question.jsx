@@ -1,6 +1,6 @@
 import { indexAsLetter } from '../utilities';
 
-const Question = ({ question, questionIndex, answer, recordAnswer }) => {
+const Question = ({ level, question, questionIndex, answer, recordAnswer }) => {
     return (
         <div className="mb-6">
             <div className="font-semibold mb-2">{questionIndex + 1}. {question.question}</div>
@@ -12,7 +12,7 @@ const Question = ({ question, questionIndex, answer, recordAnswer }) => {
                         name={`q${questionIndex}`}
                         value={optionIndex}
                         checked={answer === optionIndex}
-                        onChange={() => recordAnswer(questionIndex, optionIndex)}
+                        onChange={() => recordAnswer(level, questionIndex, optionIndex)}
                         className="mr-2"
                     />
                     <span>{indexAsLetter(optionIndex)}. {choice}</span>

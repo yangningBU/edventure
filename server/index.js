@@ -1,14 +1,13 @@
 import dotenv from 'dotenv';
 import express from 'express';
 import cors from 'cors';
-
 import { OpenAI } from 'openai';
-
-dotenv.config();
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+dotenv.config({ debug: true });
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -22,35 +21,30 @@ app.post('/generate-questions', async (req, res) => {
       messages: [
         { role: 'system', content: 'You are a helpful assistant that generates multiple choice questions with 4 answer choices.' },
         {
-            role: 'user',
-            content: 'Generate 10 exercise questions based on the following prompt. ' +
-                'Each question should have: a) the question, b) four answer choices one of which must be the correct answer to the question, and c) the correct answer index as a number (0-3). ' +
-                'The result of correct answer must correspond to the correct answer to the question. ' +
-                'Return as a JSON array with keys: question, choices, correctAnswerIndex. ' +
-                `Prompt: ${prompt}`
+          role: 'user',
+          content: `Generate a JSON object that contains 3 sets of exercise questions based on a prompt. ` +
+              'The questions in each set should be of increasing difficulty, starting at "beginner", then "intermediate", and ending with "expert". ' +
+              'Each set should contain 10 questions at the corresponding difficulty level. ' + 
+              'Each question should contain: a) the question text, b) four answer choices, one of which must be the correct answer to the question, ' +
+              'and c) the correctAnswerIndex as a number (between 0-3 to indicate the index of the corresponding answer choice). ' +
+              'The response should be keyed by the level of difficulty and contain an array of JSON objects with the keys: question, choices, and correctAnswerIndex. ' +
+              `The prompt is: "${prompt}". ` +
+              'The response should be a valid JSON object. Here is a sample partial response: ' +
+              '{"beginner": [{"question": "What is the capital of France?", "choices": ["Paris", "London", "Berlin", "Madrid"], ' +
+              '"correctAnswerIndex": 0}], "intermediate": ...}'
         }
       ],
       temperature: 0.7,
-      max_tokens: 1200,
+      max_tokens: 2400,
     });
-    console.log('--------------------------------');
-    console.log("completion", completion);
-    console.log(completion.choices[0].message.content);
-    console.log('--------------------------------');
 
-    let questions;
+    let questionsByLevel;
     try {
-      questions = JSON.parse(completion.choices[0].message.content);
-      console.log("questions", questions);
+      questionsByLevel = JSON.parse(completion.choices[0].message.content);
     } catch (e) {
-      const match = completion.choices[0].message.content.match(/\[.*\]/s);
-      if (match) {
-        questions = JSON.parse(match[0]);
-      } else {
-        throw new Error('Failed to parse questions from OpenAI response');
-      }
+      throw new Error('Failed to parse questions from OpenAI response.');
     }
-    res.json({ questions });
+    res.json({ questionsByLevel });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
