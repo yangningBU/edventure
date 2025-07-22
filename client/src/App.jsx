@@ -10,6 +10,10 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
+  const getCorrectAnswerIndex = (qIdx) => {
+    return questions[qIdx].correctAnswerIndex;
+  };
+
   const handlePromptSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -17,6 +21,7 @@ export default function App() {
     setScore(null);
     setQuestions([]);
     setAnswers([]);
+
     try {
       const res = await fetch(API_URL, {
         method: 'POST',
@@ -25,8 +30,8 @@ export default function App() {
       });
       const data = await res.json();
       if (data.questions) {
-        setQuestions(data.questions);
         setAnswers(Array(data.questions.length).fill(null));
+        setQuestions(data.questions);
       } else {
         setError('Failed to generate questions.');
       }
@@ -37,6 +42,9 @@ export default function App() {
   };
 
   const handleAnswer = (qIdx, aIdx) => {
+    const correctAnswerIndex = getCorrectAnswerIndex(qIdx);
+    const isCorrect = aIdx === correctAnswerIndex;
+    console.log(`Question Index ${qIdx} answer ${aIdx} is ${isCorrect ? 'correct' : 'incorrect'}`);
     setAnswers((prev) => prev.map((ans, i) => (i === qIdx ? aIdx : ans)));
   };
 
@@ -44,7 +52,7 @@ export default function App() {
     e.preventDefault();
     let correct = 0;
     questions.forEach((q, i) => {
-      if (answers[i] !== null && answers[i] + 1 === q.correctAnswer) correct++;
+      if (answers[i] !== null && answers[i] === q.correctAnswerIndex) correct++;
     });
     setScore(correct);
   };
