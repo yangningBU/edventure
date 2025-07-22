@@ -1,4 +1,8 @@
 import React, { useState } from 'react';
+import Error from './components/Error.jsx';
+import PromptForm from './components/PromptForm.jsx';
+import Question from './components/Question.jsx';
+import { indexAsLetter } from './utilities.js';
 
 const API_URL = `${import.meta.env.VITE_API_HOST || 'http://localhost:3002'}/generate-questions`;
 
@@ -41,64 +45,34 @@ export default function App() {
     setLoading(false);
   };
 
-  const handleAnswer = (qIdx, aIdx) => {
+  const recordAnswer = (qIdx, aIdx) => {
     const correctAnswerIndex = getCorrectAnswerIndex(qIdx);
     const isCorrect = aIdx === correctAnswerIndex;
-    console.log(`Question Index ${qIdx} answer ${aIdx} is ${isCorrect ? 'correct' : 'incorrect'}`);
+    console.log(`Q${qIdx + 1}, Ans => ${indexAsLetter(aIdx)}, correct? ${isCorrect ? 'yes' : 'no'}`);
     setAnswers((prev) => prev.map((ans, i) => (i === qIdx ? aIdx : ans)));
+  };
+
+  const scoreAnswers = () => {
+    return questions.reduce((total, question, index) => {
+      const scoredQuestion = answers[index] === question.correctAnswerIndex ? 1 : 0;
+      return total + scoredQuestion;
+    }, 0);
   };
 
   const handleSubmitAnswers = (e) => {
     e.preventDefault();
-    let correct = 0;
-    questions.forEach((q, i) => {
-      if (answers[i] !== null && answers[i] === q.correctAnswerIndex) correct++;
-    });
-    setScore(correct);
+    setScore(scoreAnswers());
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center p-4">
       <h1 className="text-3xl font-bold mb-6 mt-4">AI Exercise Generator</h1>
-      <form onSubmit={handlePromptSubmit} className="w-full max-w-xl flex flex-col gap-4 mb-8">
-        <input
-          className="p-3 rounded border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-          type="text"
-          placeholder="Enter a topic or prompt..."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          disabled={loading}
-        />
-        <button
-          className="bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition disabled:opacity-50"
-          type="submit"
-          disabled={loading || !prompt.trim()}
-        >
-          {loading ? 'Generating...' : 'Generate Questions'}
-        </button>
-      </form>
-      {error && <div className="text-red-600 mb-4">{error}</div>}
-      {questions.length > 0 && (
+      <PromptForm prompt={prompt} setPrompt={setPrompt} loading={loading} handlePromptSubmit={handlePromptSubmit} />
+      <Error error={error} />
+      {questions.length > 0 && !loading && (
         <form onSubmit={handleSubmitAnswers} className="w-full max-w-2xl p-6 rounded shadow">
           {questions.map((q, i) => (
-            <div key={i} className="mb-6">
-              <div className="font-semibold mb-2">{i + 1}. {q.question}</div>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {q.choices.map((choice, j) => (
-                  <label key={j} className={`flex items-center p-2 rounded border cursor-pointer ${answers[i] === j ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
-                    <input
-                      type="radio"
-                      name={`q${i}`}
-                      value={j}
-                      checked={answers[i] === j}
-                      onChange={() => handleAnswer(i, j)}
-                      className="mr-2"
-                    />
-                    <span>{String.fromCharCode(65 + j)}. {choice}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
+            <Question key={i} question={q} questionIndex={i} answer={answers[i]} recordAnswer={recordAnswer} />
           ))}
           <button
             className="bg-green-600 text-white py-2 px-6 rounded hover:bg-green-700 transition disabled:opacity-50"
