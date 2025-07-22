@@ -32,3 +32,6 @@ curl -X POST http://localhost:3002/generate-questions \
   -H "Content-Type: application/json" \
   -d '{"prompt":"Algebra"}'
 ```
+
+## Notes
+API docs for Open AI are [here](https://platform.openai.com/docs/overview).

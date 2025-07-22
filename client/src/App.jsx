@@ -3,6 +3,7 @@ import Error from './components/Error.jsx';
 import PromptForm from './components/PromptForm.jsx';
 import Question from './components/Question.jsx';
 import { indexAsLetter } from './utilities.js';
+import BrandLogo from '/edventure-brand.avif';
 
 const API_URL = `${import.meta.env.VITE_API_HOST || 'http://localhost:3002'}/generate-questions`;
 
@@ -66,6 +67,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center p-4">
+      <p><a href="https://www.edventureil.com/" target="_blank" rel="noopener noreferrer"><img src={BrandLogo} alt="Edventure Brand Logo" className="w-60 h-25" /></a></p>
       <h1 className="text-3xl font-bold mb-6 mt-4">AI Exercise Generator</h1>
       <PromptForm prompt={prompt} setPrompt={setPrompt} loading={loading} handlePromptSubmit={handlePromptSubmit} />
       <Error error={error} />
