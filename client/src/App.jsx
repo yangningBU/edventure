@@ -25,6 +25,9 @@ export default function App() {
   const getCorrectAnswerIndex = (level,qIdx) => {
     return questions[level][qIdx].correctAnswerIndex;
   };
+  const noQuestions = () => {
+    return Object.keys(questions).every(level => questions[level].length === 0);
+  };
 
   const handlePromptSubmit = async (e) => {
     e.preventDefault();
@@ -43,7 +46,6 @@ export default function App() {
       });
       const data = await res.json();
       if (data.questionsByLevel) {
-        console.log(data.questionsByLevel);
         const levels = Object.keys(data.questionsByLevel);
         const answersByLevel = Object.fromEntries(
           levels.map((level) => [
@@ -66,7 +68,7 @@ export default function App() {
     const correctAnswerIndex = getCorrectAnswerIndex(level, qIdx);
     const isCorrect = aIdx === correctAnswerIndex;
     console.log(`Level ${level}, Q${qIdx + 1}, Ans => ${indexAsLetter(aIdx)}, correct? ${isCorrect ? 'yes' : 'no'}`);
-    setAnswers((prev) => prev.map((ans, i) => (i === qIdx ? aIdx : ans)));
+    setAnswers((prev) => ({ ...prev, [level]: prev[level].map((ans, i) => (i === qIdx ? aIdx : ans)) }));
   };
 
   const scoreAnswers = () => {
@@ -81,7 +83,7 @@ export default function App() {
     setScore((prev) => ({ ...prev, [level]: scoreAnswers() }));
   };
 
-  const Exercise = () => {
+  const ExerciseQuestions = () => {
     return (
       questions[level].length > 0 && !loading ? (
         <form onSubmit={handleSubmitAnswers} className="w-full max-w-2xl p-6 rounded shadow">
@@ -95,6 +97,7 @@ export default function App() {
           >
             Submit Answers
           </button>
+          <Score />
         </form>
       ) : null
     );
@@ -103,10 +106,46 @@ export default function App() {
   const Score = () => {
     return (
       score[level] !== null ? (
-        <div className="mt-6 text-xl font-bold text-green-700">
+        <span className="mt-6 ml-3 text-xl font-bold text-green-700">
           Your score: {score[level]} / {questions[level].length}
-        </div>
+        </span>
       ) : null
+    );
+  };
+
+  const EmptyExercise = () => {
+    return (
+      <div className="mt-6 text-xl font-bold text-green-700">
+        No questions available for this level.
+      </div>
+    );
+  };
+
+
+  const Exercise = () => {
+    return questions[level].length === 0 ? <EmptyExercise /> : (
+      <>
+        <ExerciseQuestions />
+      </>
+    );
+  };
+
+  const LevelTabs = () => {
+    return (
+      <div className="flex space-x-2 mb-6">
+        {LEVELS.map((lvl) => {
+          return (
+            <button
+              key={lvl}
+              className={`px-4 py-2 rounded-t font-semibold transition-colors duration-200 ${level === lvl ? 'border-blue-600 text-blue-700' : 'border-transparent text-gray-500'} bg-gray-100`}
+              onClick={() => setLevel(lvl)}
+              disabled={loading}
+            >
+              {lvl.charAt(0).toUpperCase() + lvl.slice(1)}
+            </button>
+          )
+        })}
+      </div>
     );
   };
 
@@ -117,8 +156,12 @@ export default function App() {
       <p className="mb-4 w-xl">Submit a topic and get three sets of exercises to answer. Record your responses and see how well you scored.</p>
       <PromptForm prompt={prompt} setPrompt={setPrompt} loading={loading} handlePromptSubmit={handlePromptSubmit} />
       <Error error={error} />
-      <Exercise />
-      <Score />
+      {noQuestions() ? null : (
+        <>
+          <LevelTabs />
+          <Exercise />
+        </>
+      )}
     </div>
   );
 }
