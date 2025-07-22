@@ -1,6 +1,6 @@
-# Question Generator
+# Question Generator - Edventure
 ## Setup
-Add `OPENAI_API_KEY` to `./server/.env`. Make sure your key has available credits.
+Add `OPENAI_API_KEY` to `./server/.env`. Make sure your key [has available credits](https://platform.openai.com/settings/organization/billing/overview).
 
 Run `npm install`.
 
@@ -10,14 +10,14 @@ Run `npm install`.
 cd client && npm install
 npm run dev
 ```
-
-Exit with Ctrl+C.
+Will run on port `5173`. Exit with Ctrl+C.
 
 ### Backend:
 ```
 cd server && npm install
 npm run dev
 ```
+Will run on port `3002`. If this port is occupied update the `.env` file in the client project to point to the correct port for the server.
 
 Shut backend server off with:
 ```

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const API_URL = 'http://localhost:3001/generate-questions';
+const API_URL = `${import.meta.env.VITE_API_HOST || 'http://localhost:3002'}/generate-questions`;
 
 export default function App() {
   const [prompt, setPrompt] = useState('');
@@ -50,7 +50,7 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-4">
+    <div className="min-h-screen flex flex-col items-center p-4">
       <h1 className="text-3xl font-bold mb-6 mt-4">AI Exercise Generator</h1>
       <form onSubmit={handlePromptSubmit} className="w-full max-w-xl flex flex-col gap-4 mb-8">
         <input
@@ -71,7 +71,7 @@ export default function App() {
       </form>
       {error && <div className="text-red-600 mb-4">{error}</div>}
       {questions.length > 0 && (
-        <form onSubmit={handleSubmitAnswers} className="w-full max-w-2xl bg-white p-6 rounded shadow">
+        <form onSubmit={handleSubmitAnswers} className="w-full max-w-2xl p-6 rounded shadow">
           {questions.map((q, i) => (
             <div key={i} className="mb-6">
               <div className="font-semibold mb-2">{i + 1}. {q.question}</div>

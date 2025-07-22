@@ -1,7 +1,10 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const { OpenAI } = require('openai');
+import dotenv from 'dotenv';
+import express from 'express';
+import cors from 'cors';
+
+import { OpenAI } from 'openai';
+
+dotenv.config();
 
 const app = express();
 app.use(cors());
@@ -23,9 +26,15 @@ app.post('/generate-questions', async (req, res) => {
       temperature: 0.7,
       max_tokens: 1200,
     });
+    console.log('--------------------------------');
+    console.log("completion", completion);
+    console.log(completion.choices[0].message.content);
+    console.log('--------------------------------');
+
     let questions;
     try {
       questions = JSON.parse(completion.choices[0].message.content);
+      console.log("questions", questions);
     } catch (e) {
       const match = completion.choices[0].message.content.match(/\[.*\]/s);
       if (match) {
@@ -41,6 +50,7 @@ app.post('/generate-questions', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3002;
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
