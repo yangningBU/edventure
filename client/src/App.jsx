@@ -88,7 +88,7 @@ export default function App() {
       questions[level].length > 0 && !loading ? (
         <form onSubmit={handleSubmitAnswers} className="w-full max-w-2xl p-6 rounded shadow">
           {questions[level].map((q, i) => (
-            <Question key={i} level={level} question={q} questionIndex={i} answer={answers[level][i]} recordAnswer={recordAnswer} />
+            <Question key={i} level={level} question={q} questionIndex={i} answer={answers[level][i]} recordAnswer={recordAnswer} scored={score[level] !== null} />
           ))}
           <button
             className="bg-green-600 text-white py-2 px-6 rounded hover:bg-green-700 transition disabled:opacity-50"
