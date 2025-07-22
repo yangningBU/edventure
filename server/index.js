@@ -18,10 +18,17 @@ app.post('/generate-questions', async (req, res) => {
 
   try {
     const completion = await openai.chat.completions.create({
-      model: 'gpt-3.5-turbo',
+      model: 'gpt-4.1',
       messages: [
-        { role: 'system', content: 'You are a helpful assistant that generates multiple choice questions.' },
-        { role: 'user', content: `Generate 10 exercise questions based on the following prompt. Each question should have: a) the question, b) four answer choices as strings, and c) the correct answer as a number (1-4). Return as a JSON array with keys: question, choices, correctAnswer. Prompt: ${prompt}` }
+        { role: 'system', content: 'You are a helpful assistant that generates multiple choice questions with 4 answer choices.' },
+        {
+            role: 'user',
+            content: 'Generate 10 exercise questions based on the following prompt. ' +
+                'Each question should have: a) the question, b) four answer choices one of which must be the correct answer to the question, and c) the correct answer index as a number (0-3). ' +
+                'The result of correct answer must correspond to the correct answer to the question. ' +
+                'Return as a JSON array with keys: question, choices, correctAnswerIndex. ' +
+                `Prompt: ${prompt}`
+        }
       ],
       temperature: 0.7,
       max_tokens: 1200,
