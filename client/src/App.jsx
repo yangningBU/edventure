@@ -69,7 +69,7 @@ export default function App() {
     <div className="min-h-screen flex flex-col items-center p-4">
       <p><a href="https://www.edventureil.com/" target="_blank" rel="noopener noreferrer"><img src={BrandLogo} alt="Edventure Brand Logo" className="w-60 h-25" /></a></p>
       <h1 className="text-3xl font-bold mb-6 mt-4">AI Exercise Generator</h1>
-      <p className="mb-4">Submit a topic and get three sets of exercises to answer.</p>
+      <p className="mb-4 w-xl">Submit a topic and get three sets of exercises to answer. Record your responses and see how well you scored.</p>
       <PromptForm prompt={prompt} setPrompt={setPrompt} loading={loading} handlePromptSubmit={handlePromptSubmit} />
       <Error error={error} />
       {questions.length > 0 && !loading && (
