@@ -51,10 +51,10 @@ export default function App() {
         setQuestions(data.questionsByLevel);
         console.log(data.questionsByLevel[level]);
       } else {
-        setError(t('error.failedToGenerateQuestions'));
+        setError(t('errorFailedToGenerateQuestions'));
       }
     } catch (err) {
-      setError(t('error.serverError'));
+      setError(t('errorServerError'));
     }
     setLoading(false);
   };

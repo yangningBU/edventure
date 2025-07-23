@@ -8,10 +8,8 @@ const translations = {
     beginnerTitle: 'Beginner',
     intermediate: 'intermediate',
     intermediateTitle: 'Intermediate',
-    error: {
-      failedToGenerateQuestions: 'Failed to generate questions.',
-      serverError: 'Server error.'
-    },
+    errorFailedToGenerateQuestions: 'Failed to generate questions.',
+    errorServerError: 'Server error.',
     expert: 'expert',
     expertTitle: 'Expert',
     exercises: 'Exercises',
@@ -31,17 +29,15 @@ const translations = {
     beginnerTitle: 'מתחילים',
     intermediate: 'ביניים',
     intermediateTitle: 'ביניים',
-    error: {
-      failedToGenerateQuestions: 'נכשל ליצור שאלות.',
-      serverError: 'שגיאת שרת.'
-    },
+    errorFailedToGenerateQuestions: 'יצירת השאלות נכשלה',
+    errorServerError: 'שגיאת שרת.',
     expert: 'מומחים',
     expertTitle: 'מומחים',
     exercises: 'תרגולים',
     firstNumeralLetterCode: 1488,
     submitAnswers: 'שלח תשובות',
     yourScore: 'הציון שלך',
-    noQuestions: '{level} אין שאלות ברמה',
+    noQuestions: '{level} אין שאלות ברמת',
     loading: 'טוען...',
     promptPlaceholder: '...הזן נושא או הנחיה',
     generateQuestions: 'צור שאלות',

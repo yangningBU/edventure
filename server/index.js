@@ -13,9 +13,14 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 app.post('/generate-questions', async (req, res) => {
   const { prompt } = req.body;
-  if (!prompt) return res.status(400).json({ error: 'Prompt is required' });
+
+  if (!prompt) {
+    console.error('Missing prompt.');
+    return res.status(400).json({ error: 'Prompt is required' });
+  }
 
   try {
+    console.log(`Generating questions for prompt: "${prompt}".`);
     const completion = await openai.chat.completions.create({
       model: 'gpt-4.1',
       messages: [
@@ -41,11 +46,14 @@ app.post('/generate-questions', async (req, res) => {
     let questionsByLevel;
     try {
       questionsByLevel = JSON.parse(completion.choices[0].message.content);
+      console.log('Exercises generated successfully.')
     } catch (e) {
-      throw new Error('Failed to parse questions from OpenAI response.');
+      throw new Error('Failed to parse questions from OpenAI response. Try increasing the token limit.');
     }
+
     res.json({ questionsByLevel });
   } catch (err) {
+    console.error("Generating questions failed.", err);
     res.status(500).json({ error: err.message });
   }
 });
