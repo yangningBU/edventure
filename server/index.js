@@ -21,6 +21,8 @@ app.post('/generate-questions', async (req, res) => {
 
   try {
     console.log(`Generating questions for prompt: "${prompt}".`);
+    
+    const startTime = Date.now();
     const completion = await openai.chat.completions.create({
       model: 'gpt-4.1',
       messages: [
@@ -42,6 +44,10 @@ app.post('/generate-questions', async (req, res) => {
       temperature: 0.7,
       max_tokens: 2400,
     });
+
+    const endTime = Date.now();
+    const duration = endTime - startTime;
+    console.log(`OpenAI completion took ${duration}ms (${(duration / 1000).toFixed(2)}s)`);
 
     let questionsByLevel;
     try {
