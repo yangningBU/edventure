@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import Error from './components/Error.jsx';
 import LevelTabs from './components/LevelTabs.jsx';
+import LanguageToggle from './components/LanguageToggle.jsx';
 import PromptForm from './components/PromptForm.jsx';
 import Question from './components/Question.jsx';
 import BrandLogo from '/edventure-brand.avif';
 import { LEVELS, DEFAULT_LEVEL } from './constants.js';
 import { calculateScore } from './utilities.js';
+import { isRTL, t } from './i18n.js';
 
 const API_URL = `${import.meta.env.VITE_API_HOST || 'http://localhost:3002'}/generate-questions`;
 
@@ -39,6 +41,7 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt }),
       });
+
       const data = await response.json();
 
       if (data.questionsByLevel) {
@@ -46,11 +49,12 @@ export default function App() {
         const answersByLevel = generateLevelObject(Array(questionCount).fill(null));
         setAnswers(answersByLevel);
         setQuestions(data.questionsByLevel);
+        console.log(data.questionsByLevel[level]);
       } else {
-        setError('Failed to generate questions.');
+        setError(t('error.failedToGenerateQuestions'));
       }
     } catch (err) {
-      setError('Server error.');
+      setError(t('error.serverError'));
     }
     setLoading(false);
   };
@@ -72,10 +76,13 @@ export default function App() {
   };
 
   const Score = () => {
+    const scoreText = isRTL()
+      ? `${questions[level].length} / ${score[level]}`
+      : `${score[level]} / ${questions[level].length}`;
     return (
       score[level] !== null ? (
-        <span className="mt-6 ml-3 text-xl font-bold text-green-700">
-          Your score: {score[level]} / {questions[level].length}
+        <span className="mt-6 ml-3 mr-3 text-xl font-bold text-green-700" style={{direction: isRTL() ? 'rtl' : 'ltr'}}>
+          {t('yourScore')}: {scoreText}
         </span>
       ) : null
     );
@@ -84,26 +91,35 @@ export default function App() {
   const EmptyExercise = () => {
     return (
       <div className="mt-6 text-xl font-bold text-gray-500">
-        No {level} questions available.
+        {t('noQuestions', { level: t(level) })}
       </div>
     );
   };
 
+  const SubmitAnswersButton = () => (
+    <button
+      className="bg-blue-600 text-white py-2 px-6 rounded hover:bg-blue-700 transition disabled:opacity-50"
+      type="submit"
+      disabled={answers[level].some((a) => a === null)}
+    >
+      {t('submitAnswers')}
+    </button>
+  )
+
+  const ScoringArea = () => {
+    return isRTL()
+      ? <><Score /><SubmitAnswersButton /></>
+      : <><SubmitAnswersButton /><Score /></>
+  } 
+       
   const ExerciseQuestions = () => {
     return (
       questions[level].length ? (
-        <form onSubmit={handleSubmitAnswers} className="w-full max-w-2xl p-6 rounded shadow">
+        <form onSubmit={handleSubmitAnswers} className={`w-full max-w-2xl p-6 rounded shadow text-${isRTL() ? 'right' : 'left'}`}>
           {questions[level].map((q, i) => (
             <Question key={i} level={level} question={q} questionIndex={i} answer={answers[level][i]} recordAnswer={recordAnswer} scored={score[level] !== null} />
           ))}
-          <button
-            className="bg-green-600 text-white py-2 px-6 rounded hover:bg-green-700 transition disabled:opacity-50"
-            type="submit"
-            disabled={answers[level].some((a) => a === null)}
-          >
-            Submit Answers
-          </button>
-          <Score />
+          <ScoringArea />
         </form>
       ) : <EmptyExercise />
     );
@@ -112,7 +128,7 @@ export default function App() {
   const Exercises = () => {
     return loading || noQuestionsAcrossAllLevels ? null : (
       <>
-        <h2 className="text-3xl font-bold mb-6 mt-6">Exercises</h2>
+        <h2 className="text-3xl font-bold mb-6 mt-6">{t('exercises')}</h2>
         <LevelTabs level={level} setLevel={setLevel} loading={loading} />
         <ExerciseQuestions />
       </>
@@ -121,9 +137,12 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center p-4">
+      <div className="flex justify-end w-full max-w-2xl mb-2">
+        <LanguageToggle />
+      </div>
       <p><a href="https://www.edventureil.com/" target="_blank" rel="noopener noreferrer"><img src={BrandLogo} alt="Edventure Brand Logo" className="w-60 h-25" /></a></p>
-      <h1 className="text-3xl font-bold mb-6 mt-4">AI Exercise Generator</h1>
-      <p className="mb-4 w-xl">Submit a topic and you'll get three sets of exercises to answer questions about it in increasing difficulty. Enter your responses to see how well you score.</p>
+      <h1 className="text-3xl font-bold mb-6 mt-4">{t('appTitle')}</h1>
+      <p className={`mb-4 w-xl ${isRTL() ? 'text-right' : ''}`}>{t('appDescription')}</p>
       <PromptForm prompt={prompt} setPrompt={setPrompt} loading={loading} handlePromptSubmit={handlePromptSubmit} />
       <Error error={error} />
       <Exercises />

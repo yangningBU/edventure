@@ -1,9 +1,13 @@
+import React from 'react';
+import { isRTL, t } from '../i18n.js';
 import { LEVELS } from '../constants.js';
 
 const LevelTabs = ({ level, setLevel, loading }) => {
+	const levels = isRTL() ? LEVELS.toReversed() : LEVELS;
 	return (
 		<div className="flex space-x-2 mb-6">
-			{LEVELS.map((lvl) => {
+			{levels.map((lvl) => {
+				const label = t(`${lvl}Title`);
 				return (
 					<button
 						key={lvl}
@@ -11,7 +15,7 @@ const LevelTabs = ({ level, setLevel, loading }) => {
 						onClick={() => setLevel(lvl)}
 						disabled={loading}
 					>
-						{lvl.charAt(0).toUpperCase() + lvl.slice(1)}
+						{label}
 					</button>
 				)
 			})}

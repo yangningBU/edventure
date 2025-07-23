@@ -1,5 +1,8 @@
+import { t } from './i18n.js';
+
 export const indexAsLetter = (index) => {
-	return String.fromCharCode(65 + index);
+	const alphabetStartingCode = t('firstNumeralLetterCode');
+	return String.fromCharCode(alphabetStartingCode + index);
 };
 
 export const calculateScore = (level, questions, answers) => {
