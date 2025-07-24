@@ -19,12 +19,13 @@ app.post('/generate-questions', async (req, res) => {
     return res.status(400).json({ error: 'Prompt is required' });
   }
 
+  let completion;
   try {
-    console.log(`Generating questions for prompt: "${prompt}".`);
+    const startTime = new Date();
+    console.log(`Generating questions for prompt: "${prompt}" at ${startTime.toISOString()}.`);
     
-    const startTime = Date.now();
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4.1',
+    completion = await openai.chat.completions.create({
+      model: 'gpt-4o',
       messages: [
         { role: 'system', content: 'You are a helpful assistant that generates multiple choice questions with 4 answer choices.' },
         {
@@ -42,19 +43,26 @@ app.post('/generate-questions', async (req, res) => {
         }
       ],
       temperature: 0.7,
-      max_tokens: 2400,
+      max_tokens: 2500,
     });
 
-    const endTime = Date.now();
+    const endTime = new Date();
     const duration = endTime - startTime;
-    console.log(`OpenAI completion took ${duration}ms (${(duration / 1000).toFixed(2)}s)`);
+    console.log(`Request completed at ${endTime.toISOString()}.`)
+    console.log(`It took ${duration}ms (${(duration / 1000).toFixed(2)}s).`);
+    console.log(`It cost ${completion?.usage?.total_tokens ?? 'unknown'} tokens.`);
 
+    const response = completion.choices[0].message.content;
+    const extractedResponse = response.replace(/```json\n/, '').replace(/\n```/, '');
     let questionsByLevel;
     try {
-      questionsByLevel = JSON.parse(completion.choices[0].message.content);
-      console.log('Exercises generated successfully.')
+      questionsByLevel = JSON.parse(extractedResponse);
+      console.log('Exercise questions generated successfully.')
     } catch (e) {
-      throw new Error('Failed to parse questions from OpenAI response. Try increasing the token limit.');
+      const errorMessage = 'Failed to parse questions from OpenAI response. Either the response syntax contains erroneous characters or the token limit is too low.';
+      console.error(errorMessage, e);
+      console.log(`Response: ${response}`);
+      throw new Error(errorMessage);
     }
 
     res.json({ questionsByLevel });
