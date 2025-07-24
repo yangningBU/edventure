@@ -1,4 +1,4 @@
-import { isRTL, t } from '../i18n.js';
+import { isRTL, t } from '../i18n/t.js';
 
 const PromptForm = ({ prompt, setPrompt, loading, handlePromptSubmit }) => {
     return (

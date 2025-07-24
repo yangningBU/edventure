@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import Error from './components/Error.jsx';
 import LevelTabs from './components/LevelTabs.jsx';
 import LanguageToggle from './components/LanguageToggle.jsx';
@@ -7,7 +7,7 @@ import Question from './components/Question.jsx';
 import BrandLogo from '/edventure-brand.avif';
 import { LEVELS, DEFAULT_LEVEL } from './constants.js';
 import { calculateScore } from './utilities.js';
-import { isRTL, t } from './i18n.js';
+import { ensureLanguageSelection, isRTL, t } from './i18n/t.js';
 
 const API_URL = `${import.meta.env.VITE_API_HOST || 'http://localhost:3002'}/generate-questions`;
 
@@ -25,6 +25,10 @@ export default function App() {
   const [error, setError] = useState('');
 
   const noQuestionsAcrossAllLevels = Object.values(questions).every(level => level.length === 0);
+
+  useEffect(() => {
+    ensureLanguageSelection();
+  }, []);
 
   const handlePromptSubmit = async (e) => {
     e.preventDefault();
@@ -49,7 +53,6 @@ export default function App() {
         const answersByLevel = generateLevelObject(Array(questionCount).fill(null));
         setAnswers(answersByLevel);
         setQuestions(data.questionsByLevel);
-        console.log(data.questionsByLevel[level]);
       } else {
         setError(t('errorFailedToGenerateQuestions'));
       }
@@ -71,7 +74,7 @@ export default function App() {
     e.preventDefault();
     setScore((prev) => ({
       ...prev,
-      [level]: calculateScore(level, questions, answers)
+      [level]: calculateScore(questions[level], answers[level])
     }));
   };
 

@@ -1,4 +1,4 @@
-import { getLang, setLang } from '../i18n.js';
+import { getLang, setLang } from '../i18n/t.js';
 
 export default function LanguageToggle() {
   const switchLanguage = (code) => {

@@ -1,5 +1,5 @@
 import { indexAsLetter } from '../utilities.js';
-import { isRTL } from '../i18n.js';
+import { isRTL } from '../i18n/t.js';
 
 const Question = ({ level, question, questionIndex, answer, recordAnswer, scored }) => {
     const isCorrect = answer === question.correctAnswerIndex;

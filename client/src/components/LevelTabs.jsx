@@ -1,5 +1,5 @@
 import React from 'react';
-import { isRTL, t } from '../i18n.js';
+import { isRTL, t } from '../i18n/t.js';
 import { LEVELS } from '../constants.js';
 
 const LevelTabs = ({ level, setLevel, loading }) => {
