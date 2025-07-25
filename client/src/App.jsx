@@ -5,11 +5,10 @@ import LanguageToggle from './components/LanguageToggle.jsx';
 import PromptForm from './components/PromptForm.jsx';
 import Question from './components/Question.jsx';
 import BrandLogo from '/edventure-brand.avif';
+import { generateQuestions } from './api.js';
 import { LEVELS, DEFAULT_LEVEL } from './constants.js';
 import { calculateScore } from './utilities.js';
 import { ensureLanguageSelection, isRTL, t } from './i18n/t.js';
-
-const API_URL = `${import.meta.env.VITE_API_HOST || 'http://localhost:3002'}/generate-questions`;
 
 export default function App() {
   const generateLevelObject = (levelValue = null) => (
@@ -24,7 +23,7 @@ export default function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const noQuestionsAcrossAllLevels = Object.values(questions).every(level => level.length === 0);
+  const noData = Object.values(questions).every(level => level.length === 0);
 
   useEffect(() => {
     ensureLanguageSelection();
@@ -40,12 +39,7 @@ export default function App() {
     setAnswers(generateLevelObject([]));
 
     try {
-      const response = await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt }),
-      });
-
+      const response = await generateQuestions(prompt);
       const data = await response.json();
 
       if (data.questionsByLevel) {
@@ -59,14 +53,17 @@ export default function App() {
     } catch (err) {
       setError(t('errorServerError'));
     }
+
     setLoading(false);
   };
 
-  const recordAnswer = (level, qIdx, aIdx) => {
+  const recordAnswer = (level, questionIndex, answerIndex) => {
     setAnswers((prev) => {
       const currentAnswers = prev[level];
-      const updatedLevel = currentAnswers.map((ans, i) => (i === qIdx ? aIdx : ans));
-      return {...prev, [level]: updatedLevel}
+      const updatedAnswers = currentAnswers.map((existingAnswer, i) => (
+        i === questionIndex ? answerIndex : existingAnswer
+      ));
+      return {...prev, [level]: updatedAnswers}
     });
   };
 
@@ -83,11 +80,11 @@ export default function App() {
       ? `${questions[level].length} / ${score[level]}`
       : `${score[level]} / ${questions[level].length}`;
     return (
-      score[level] !== null ? (
+      score[level] === null ? null : (
         <span className="mt-6 ml-3 mr-3 text-xl font-bold text-green-700" style={{direction: isRTL() ? 'rtl' : 'ltr'}}>
           {t('yourScore')}: {scoreText}
         </span>
-      ) : null
+      )
     );
   };
 
@@ -113,15 +110,31 @@ export default function App() {
     return isRTL()
       ? <><Score /><SubmitAnswersButton /></>
       : <><SubmitAnswersButton /><Score /></>
-  } 
-       
+  }
+
+  const Questions = () => {
+    return (
+      <>
+        {questions[level].map((q, i) => (
+          <Question
+            key={i}
+            level={level}
+            question={q}
+            questionIndex={i}
+            answer={answers[level][i]}
+            recordAnswer={recordAnswer}
+            scored={score[level] !== null}
+          />
+        ))}
+      </>
+    );
+  }
+
   const ExerciseQuestions = () => {
     return (
       questions[level].length ? (
         <form onSubmit={handleSubmitAnswers} className={`w-full max-w-2xl p-6 rounded shadow text-${isRTL() ? 'right' : 'left'}`}>
-          {questions[level].map((q, i) => (
-            <Question key={i} level={level} question={q} questionIndex={i} answer={answers[level][i]} recordAnswer={recordAnswer} scored={score[level] !== null} />
-          ))}
+          <Questions />
           <ScoringArea />
         </form>
       ) : <EmptyExercise />
@@ -129,14 +142,15 @@ export default function App() {
   };
 
   const Exercises = () => {
-    return loading || noQuestionsAcrossAllLevels ? null : (
-      <>
+    return loading || noData ? null : (
+      <div className="flex flex-col w-full max-w-2xl text-center">
         <h2 className="text-3xl font-bold mb-6 mt-6">{t('exercises')}</h2>
         <LevelTabs level={level} setLevel={setLevel} loading={loading} />
         <ExerciseQuestions />
-      </>
+      </div>
     );
   };
+
 
   return (
     <div className="min-h-screen flex flex-col items-center p-4">

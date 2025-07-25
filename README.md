@@ -1,11 +1,16 @@
 # Exercise Generator - Edventure
 ## Setup
-Add `OPENAI_API_KEY` to `./server/.env`. Make sure your key [has available credits](https://platform.openai.com/settings/organization/billing/overview).
+Add `OPENAI_API_KEY` to `./server/.env`. Make sure your key [has available credits](https://platform.openai.com/settings/organization/billing/overview). For security purposes I excluded the contents of my actual API key as I assume you all have a valid key yourselves.
 
 ### From Zipfile
-Nothing! Your dependencies are already bundled with the application.
+Nothing to do! Your dependencies are already bundled with the application.
 
 ### From Repo
+Add your `.env` file to `./client` with:
+```
+VITE_API_HOST=http://localhost:3002
+```
+
 Install dependencies:
 ```
 npm install
@@ -19,23 +24,16 @@ cd ..
 ```
 cd client && npm run dev
 ```
-Will run on port `5173`. Exit with Ctrl+C.
+Will run in watch mode on port `5173`.
 
 ### Backend:
 ```
 cd server && npm run dev
 ```
 Will run on port `3002`.
-If this port is already occupied, update the VITE_API_HOST in the `.env` file in the `client` project to point to the correct port for the server.
-
-Shutdown backend server off with:
-```
-PORT=3002
-lsof -n -i:$PORT | grep LISTEN | awk '{ print $2 }' | xargs -I pid kill pid
-```
 
 ## Testing
-You can run curl against our POST endpoint with:
+You can test the Open AI call without the frontend using:
 ```
 curl -X POST http://localhost:3002/generate-questions \
   -H "Content-Type: application/json" \
