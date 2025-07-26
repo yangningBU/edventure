@@ -163,7 +163,7 @@ export default function App() {
         </a>
       </p>
       <h1 className="text-3xl font-bold mb-6 mt-4">{t('appTitle')}</h1>
-      <p className={`mb-4 w-full max-w-xl ${isRTL() ? 'text-right' : ''}`}>{t('appDescription')}</p>
+      <p className={`mb-4 w-full max-w-xl ${isRTL() ? 'text-right' : 'text-left'}`}>{t('appDescription')}</p>
       <PromptForm prompt={prompt} setPrompt={setPrompt} loading={loading} handlePromptSubmit={handlePromptSubmit} />
       <Error error={error} />
       <Exercises />
