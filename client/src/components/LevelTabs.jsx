@@ -5,7 +5,7 @@ import { LEVELS } from '../constants.js';
 const LevelTabs = ({ level, setLevel, loading }) => {
 	const levels = isRTL() ? LEVELS.toReversed() : LEVELS;
 	return (
-		<div className="flex space-x-2 mb-6">
+		<div className="flex justify-center space-x-2 mb-6">
 			{levels.map((lvl) => {
 				const label = t(`${lvl}Title`);
 				return (

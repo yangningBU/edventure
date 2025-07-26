@@ -157,9 +157,13 @@ export default function App() {
       <div className="flex justify-end w-full max-w-2xl mb-2">
         <LanguageToggle />
       </div>
-      <p><a href="https://www.edventureil.com/" target="_blank" rel="noopener noreferrer"><img src={BrandLogo} alt="Edventure Brand Logo" className="w-60 h-25" /></a></p>
+      <p>
+        <a href="https://www.edventureil.com/" target="_blank">
+          <img src={BrandLogo} alt="Edventure Brand Logo" className="w-50 h-auto" />
+        </a>
+      </p>
       <h1 className="text-3xl font-bold mb-6 mt-4">{t('appTitle')}</h1>
-      <p className={`mb-4 w-xl ${isRTL() ? 'text-right' : ''}`}>{t('appDescription')}</p>
+      <p className={`mb-4 w-full max-w-xl ${isRTL() ? 'text-right' : ''}`}>{t('appDescription')}</p>
       <PromptForm prompt={prompt} setPrompt={setPrompt} loading={loading} handlePromptSubmit={handlePromptSubmit} />
       <Error error={error} />
       <Exercises />

@@ -14,7 +14,7 @@ const translations = {
   yourScore: 'הציון שלך',
   noQuestions: '{level} אין שאלות ברמת',
   loading: 'טוען...',
-  promptPlaceholder: '...הזן נושא או הנחיה',
+  promptPlaceholder: 'הזן נושא או הנחיה...',
   generateQuestions: 'צור שאלות',
   generating: '...יוצר שאלות'
 }

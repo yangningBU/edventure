@@ -27,13 +27,13 @@ const Question = ({ level, question, questionIndex, answer, recordAnswer, scored
         )
     };
     return (
-        <div className={`mb-6 ${isRTL() ? 'text-right' : ''}`}>
+        <div className={`mb-6 ${isRTL() ? 'text-right' : 'text-left'}`}>
             <FormattedQuestion />
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2" style={{direction: isRTL() ? 'rtl' : 'ltr'}}>
             {question.choices.map((choice, optionIndex) => (
                 <label
                     key={optionIndex}
-                    className={`flex items-center p-2 rounded border cursor-pointer ${answer === optionIndex ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}
+                    className={`flex items-center p-2 rounded border cursor-pointer ${answer === optionIndex ? 'border-blue-50 bg-blue-500' : 'border-gray-200'}`}
                     dir={isRTL() ? 'rtl' : 'ltr'}
                 >
                     <input

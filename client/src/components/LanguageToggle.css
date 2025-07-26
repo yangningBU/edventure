@@ -1,0 +1,5 @@
+@media (prefers-color-scheme: dark) {
+  .language-toggle {
+    color: #242424;
+  }
+}
