@@ -1,4 +1,4 @@
-# Exercise Generator - Edventure
+# AI Exercise Generator
 ## Setup
 Add `OPENAI_API_KEY` to `./server/.env`. Make sure your key [has available credits](https://platform.openai.com/settings/organization/billing/overview). For security purposes I excluded the contents of my actual API key as I assume you all have a valid key yourselves.
 
