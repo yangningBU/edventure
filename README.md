@@ -1,6 +1,6 @@
 # AI Exercise Generator
 ## Setup
-Add `OPENAI_API_KEY` to `./server/.env`. Make sure your key [has available credits](https://platform.openai.com/settings/organization/billing/overview). Although it is a security no-no, I've included my own API key in this bundle so that you can run the application without issues.
+Add `OPENAI_API_KEY` to `./server/.env`. Make sure your key [has available credits](https://platform.openai.com/settings/organization/billing/overview). Although it is a security no-no, I've included my own API key in this bundle so that you can run the application without issues. I will disabled it after the interview process.
 
 ### From Zipfile
 Nothing to do! Your dependencies are already bundled with the application.
