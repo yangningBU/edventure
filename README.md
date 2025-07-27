@@ -6,6 +6,8 @@ Add `OPENAI_API_KEY` to `./server/.env`. Make sure your key [has available credi
 Nothing to do! Your dependencies are already bundled with the application.
 
 ### From Repo
+Code available at http://github.com/yangningBU/edventure.
+
 Add your `.env` file to `./client` with:
 ```
 VITE_API_HOST=http://localhost:3002
@@ -22,7 +24,7 @@ cd ..
 ## Run application
 ### Frontend:
 ```
-cd client && npm run dev
+
 ```
 Will run in watch mode on port `5173`.
 
@@ -40,5 +42,5 @@ curl -X POST http://localhost:3002/generate-questions \
   -d '{"prompt":"trees"}'
 ```
 
-## Notes
-API docs for Open AI REST API are [here](https://platform.openai.com/docs/overview).
+## Design Decisions
+Node.js + Express and React were requirements of the project so technology and stack were already taken care of. The Open API was also a requirement. I set up the project using Cursor and then implemented the actual features myself. My biggest unresolved challenge is that requests to the Open AI API take longer than expected.
