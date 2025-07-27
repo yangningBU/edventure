@@ -16,7 +16,7 @@ const translations = {
   loading: 'טוען...',
   promptPlaceholder: 'הזן נושא או הנחיה...',
   generateQuestions: 'צור שאלות',
-  generating: '...יוצר שאלות (זה עלול לקחת קצת זמן)'
+  generating: '...יוצר שאלות (זה יכול לקחת קצת זמן)'
 }
 
 const he = {
