@@ -1,8 +1,15 @@
 import { OpenAI } from 'openai';
 
+const LANG_CODES = {
+  en: 'English',
+  he: 'Hebrew',
+}
+
 class LLMInteractor {
-  constructor() {
+  constructor(lang = 'en') {
+    this.language = LANG_CODES[lang] || 'English';
     this.openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+    
     this.prompt = null;
     this.completion = null;
     this.rawResponse = null;
@@ -12,6 +19,10 @@ class LLMInteractor {
 
   async submitPrompt(prompt) {
     this.prompt = prompt;
+
+    const startTime = new Date();
+    console.log(`Generating questions for language ${this.language} and prompt: "${prompt}" at ${startTime.toISOString()}.`);
+
     this.completion = await this.openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
@@ -24,16 +35,23 @@ class LLMInteractor {
               'Each question should contain: a) the question text, b) four answer choices, one of which must be the correct answer to the question, ' +
               'and c) the correctAnswerIndex as a number (between 0-3 to indicate the index of the corresponding answer choice). ' +
               'The response should be keyed by the level of difficulty and contain an array of JSON objects with the keys: question, choices, and correctAnswerIndex. ' +
-              `The prompt is: "${prompt}". ` +
+              `The prompt is: "${this.prompt}". ` +
               'The response should be a valid JSON object. Here is a sample partial response: ' +
               '{"beginner": [{"question": "What is the capital of France?", "choices": ["Paris", "London", "Berlin", "Madrid"], ' +
-              '"correctAnswerIndex": 0}], "intermediate": ...}'
+              `"correctAnswerIndex": 0}], "intermediate": ...}. Return results in ${this.language}.`
         }
       ],
       temperature: 0.7,
       max_tokens: 2500,
     });
+
     this.processResponse();
+
+    const endTime = new Date();
+    const duration = endTime - startTime;
+    console.log(`Request completed at ${endTime.toISOString()}.`)
+    console.log(`It took ${duration}ms (${(duration / 1000).toFixed(2)}s).`);
+    console.log(`It cost ${this.getCost() ?? 'unknown'} tokens.`);
   }
 
   processResponse() {
@@ -43,6 +61,7 @@ class LLMInteractor {
     
     try {
       this.formattedResponse = JSON.parse(this.extractedText);
+      console.log('Exercise questions generated successfully.')
     } catch (e) {
       console.error(errorMessage, e);
       console.log(`Response from interactor: ${this.rawResponse}`);

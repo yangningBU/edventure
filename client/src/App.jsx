@@ -8,7 +8,7 @@ import BrandLogo from '/edventure-brand.avif';
 import { generateQuestions } from './api.js';
 import { LEVELS, DEFAULT_LEVEL } from './constants.js';
 import { calculateScore } from './utilities.js';
-import { ensureLanguageSelection, isRTL, t } from './i18n/t.js';
+import { ensureLanguageSelection, getLang, isRTL, t } from './i18n/t.js';
 
 export default function App() {
   const generateLevelObject = (levelValue = null) => (
@@ -39,7 +39,7 @@ export default function App() {
     setAnswers(generateLevelObject([]));
 
     try {
-      const response = await generateQuestions(prompt);
+      const response = await generateQuestions(prompt, getLang());
       const data = await response.json();
 
       if (data.questionsByLevel) {
@@ -51,6 +51,7 @@ export default function App() {
         setError(t('errorFailedToGenerateQuestions'));
       }
     } catch (err) {
+      console.error(err);
       setError(t('errorServerError'));
     }
 
@@ -142,11 +143,13 @@ export default function App() {
   };
 
   const Exercises = () => {
-    return loading || noData ? null : (
-      <div className="flex flex-col w-full max-w-2xl text-center">
-        <h2 className="text-3xl font-bold mb-6 mt-6">{t('exercises')}</h2>
-        <LevelTabs level={level} setLevel={setLevel} loading={loading} />
-        <ExerciseQuestions />
+    return (
+      <div className="flex flex-col w-full max-w-2xl text-center" id="exercises">
+        {loading || noData ? null : <>
+          <h2 className="text-3xl font-bold mb-6 mt-6">{t('exercises')}</h2>
+          <LevelTabs level={level} setLevel={setLevel} loading={loading} />
+          <ExerciseQuestions />
+        </>}
       </div>
     );
   };

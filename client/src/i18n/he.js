@@ -6,7 +6,7 @@ const translations = {
   intermediate: 'ביניים',
   intermediateTitle: 'ביניים',
   errorFailedToGenerateQuestions: 'יצירת השאלות נכשלה',
-  errorServerError: 'שגיאת שרת.',
+  errorServerError: 'שגיאת שרת',
   expert: 'מומחים',
   expertTitle: 'מומחים',
   exercises: 'תרגולים',
