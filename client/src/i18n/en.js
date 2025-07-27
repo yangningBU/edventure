@@ -16,7 +16,7 @@ const translations = {
   loading: 'Loading...',
   promptPlaceholder: 'Enter a topic or prompt...',
   generateQuestions: 'Generate Questions',
-  generating: 'Generating...'
+  generating: 'Generating (this may take awhile)...'
 }
 
 const en = {
