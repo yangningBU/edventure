@@ -29,6 +29,17 @@ export default function App() {
     ensureLanguageSelection();
   }, []);
 
+  useEffect(() => {
+    scrollToExercises();
+  }, [questions]);
+
+  const scrollToExercises = () => {
+    const exercisesElement = document.getElementById('exercises');
+    if (exercisesElement) {
+      exercisesElement.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   const handlePromptSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);

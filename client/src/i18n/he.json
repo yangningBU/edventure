@@ -1,0 +1,24 @@
+{
+  "alphabetStartingCode": 1488,
+  "isRTL": true,
+  "name": "עברית",
+  "translations": {
+    "appDescription": "הזינו נושא ותקבלו שלוש רמות של תרגולים במגוון רמות קושי. ענו על השאלות וגלו את הציון שלכם",
+    "appTitle": "מחולל תרגולים",
+    "beginner": "מתחילים",
+    "beginnerTitle": "מתחילים",
+    "errorFailedToGenerateQuestions": "יצירת השאלות נכשלה",
+    "errorServerError": "שגיאת שרת",
+    "exercises": "תרגולים",
+    "expert": "מומחים",
+    "expertTitle": "מומחים",
+    "generateQuestions": "צור שאלות",
+    "generating": "...יוצר שאלות (זה יכול לקחת קצת זמן)",
+    "intermediate": "ביניים",
+    "intermediateTitle": "ביניים",
+    "noQuestions": "{level} אין שאלות ברמת",
+    "promptPlaceholder": "הזן נושא או הנחיה...",
+    "submitAnswers": "שלח תשובות",
+    "yourScore": "הציון שלך"
+  }
+}

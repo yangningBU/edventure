@@ -1,5 +1,5 @@
-import en from './en.js';
-import he from './he.js';
+import en from './en.json';
+import he from './he.json';
 
 const DEFAULT_LANG = 'en';
 const LANGUAGES = {

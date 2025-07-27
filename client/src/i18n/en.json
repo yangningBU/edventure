@@ -1,0 +1,24 @@
+{
+  "alphabetStartingCode": 65,
+  "isRTL": false,
+  "name": "English",
+  "translations": {
+    "appDescription": "Submit a topic and you\"ll get three sets of exercises to answer questions about it in increasing difficulty. Enter your responses to see how well you score.",
+    "appTitle": "AI Exercise Generator",
+    "beginner": "beginner",
+    "beginnerTitle": "Beginner",
+    "errorFailedToGenerateQuestions": "Failed to generate questions.",
+    "errorServerError": "Server error.",
+    "exercises": "Exercises",
+    "expert": "expert",
+    "expertTitle": "Expert",
+    "generateQuestions": "Generate Questions",
+    "generating": "Generating (this may take awhile)...",
+    "intermediate": "intermediate",
+    "intermediateTitle": "Intermediate",
+    "noQuestions": "No {level} questions available.",
+    "promptPlaceholder": "Enter a topic or prompt...",
+    "submitAnswers": "Submit Answers",
+    "yourScore": "Your score"
+  }
+}

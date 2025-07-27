@@ -27,6 +27,7 @@ const FormattedQuestion = ({ question, questionIndex, scoreMark }) => {
 const Question = ({ level, question, questionIndex, answer, recordAnswer, scored }) => {
     const isCorrect = answer === question.correctAnswerIndex;
     const scoreMark = scored ? isCorrect ? '✅' : '❌' : '';
+
     const Choice = ({ choice, choiceIndex }) => {
       const isSelected = answer === choiceIndex;
       return (
@@ -47,6 +48,7 @@ const Question = ({ level, question, questionIndex, answer, recordAnswer, scored
         </label>
       )
     }
+
     return (
       <div className={`mb-6 ${isRTL() ? 'text-right' : 'text-left'}`}>
         <FormattedQuestion question={question} questionIndex={questionIndex} scoreMark={scoreMark} />
