@@ -13,7 +13,7 @@
     "expert": "expert",
     "expertTitle": "Expert",
     "generateQuestions": "Generate Questions",
-    "generating": "Generating (this may take awhile)...",
+    "generating": "Generating (this may take a minute)...",
     "intermediate": "intermediate",
     "intermediateTitle": "Intermediate",
     "noQuestions": "No {level} questions available.",
