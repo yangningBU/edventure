@@ -76,6 +76,8 @@ class LLMInteractor {
     console.log(`Request completed at ${endTime.toISOString()}.`)
     console.log(`It took ${duration}ms (${(duration / 1000).toFixed(2)}s).`);
     console.log(`It cost ${this.getCost() ?? 'unknown'} tokens.`);
+
+    return this.formattedResponse;
   }
 
   processResponse() {
