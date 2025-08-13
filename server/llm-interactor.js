@@ -88,9 +88,13 @@ class LLMInteractor {
       this.formattedResponse = JSON.parse(this.rawResponse);
       console.log('Exercise questions generated successfully.')
     } catch (e) {
-      console.error(errorMessage, e);
+      console.error(e);
       console.log(`Response from interactor: ${this.rawResponse}`);
-      throw new Error('Failed to parse JSON from OpenAI response. Either the response syntax contains erroneous characters or the token limit is too low.');
+      throw new Error(
+        'Failed to parse JSON from OpenAI response. ' +
+        'Either the response syntax contains erroneous characters ' +
+        'or the token limit is too low.'
+      );
     }
   }
 
